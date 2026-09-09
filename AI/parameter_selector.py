@@ -150,6 +150,15 @@ ranking["signature_score"] = minmax_low(
     ranking["signature_bytes_mean"]
 )
 
+ranking["key_size_total"] = (
+    ranking["public_key_bytes"] +
+    ranking["secret_key_bytes"]
+)
+
+ranking["key_size_score"] = minmax_low(
+    ranking["key_size_total"]
+)
+
 ranking["security_score"] = minmax_high(
     ranking["security_bits"]
 )
@@ -158,13 +167,15 @@ ranking["security_score"] = minmax_high(
 # 40% signing
 # 15% key generation
 # 10% verification
-# 15% signature size
+# 10% signature size
+# 5% public + secret key size
 # 20% security
 ranking["final_score"] = (
     0.40 * ranking["sign_score"] +
     0.15 * ranking["keygen_score"] +
     0.10 * ranking["verify_score"] +
-    0.15 * ranking["signature_score"] +
+    0.10 * ranking["signature_score"] +
+    0.05 * ranking["key_size_score"] +
     0.20 * ranking["security_score"]
 )
 
@@ -255,7 +266,8 @@ with open(report_path, "w") as f:
     f.write("Signing latency      : 0.40\n")
     f.write("Key generation       : 0.15\n")
     f.write("Verification         : 0.10\n")
-    f.write("Signature size       : 0.15\n")
+    f.write("Signature size       : 0.10\n")
+    f.write("Key size (PK + SK)   : 0.05\n")
     f.write("Security level       : 0.20\n")
 
 print("===== AI-SUPPORTED SPHINCS+ PARAMETER SELECTION =====")

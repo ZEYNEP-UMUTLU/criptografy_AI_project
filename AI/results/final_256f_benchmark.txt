@@ -4,16 +4,16 @@ n = 32, h = 68, d = 17, b = 9, k = 35, w = 16
 Iterations : 30
 
 KEYGEN
-Mean   : 3916.05 us
-Median : 3858.42 us
+Mean   : 4029.88 us
+Median : 3997.36 us
 
 SIGN
-Mean   : 80754.57 us
-Median : 79917.05 us
+Mean   : 80089.27 us
+Median : 79874.62 us
 
 VERIFY
-Mean   : 2088.45 us
-Median : 2077.43 us
+Mean   : 2078.96 us
+Median : 2068.41 us
 
 Signature size : 49856 bytes
 Public key size : 64 bytes

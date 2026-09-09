@@ -2,9 +2,8 @@
 
 Dataset observations : 180
 Model                : RandomForestRegressor
-Estimators            : 300
-Random state          : 42
-Cross-validation      : Leave-One-Out
+Estimators           : 300
+Cross-validation     : Leave-One-Out
 
 MODEL PERFORMANCE
 MAE  : 11298.22 us
@@ -12,13 +11,14 @@ RMSE : 23417.53 us
 R2   : 0.9989
 
 FEATURE IMPORTANCE
-b                    0.343460
-k                    0.222194
-h                    0.212264
-d                    0.176216
-signature_bytes      0.023082
-n                    0.022785
-w                    0.000000
+        feature  importance
+              b    0.343460
+              k    0.222194
+              h    0.212264
+              d    0.176216
+signature_bytes    0.023082
+              n    0.022785
+              w    0.000000
 
 PARAMETER RANKING
  rank                    parameter  security_bits  predicted_sign_us     keygen_us   verify_us  signature_bytes_mean  final_score
@@ -29,13 +29,6 @@ PARAMETER RANKING
     5 sphincs-shake256-256s-simple            256       1.567425e+06 133020.401333 2184.917667               29792.0     0.397051
     6 sphincs-shake256-192s-simple            192       1.734028e+06 193353.577333 1401.899000               16224.0     0.291731
 
-AI RECOMMENDATION
-sphincs-shake256-256f-simple
+AI RECOMMENDATION : sphincs-shake256-256f-simple
 
-SCORING WEIGHTS
-Signing latency      : 0.40
-Key generation       : 0.15
-Verification         : 0.10
-Signature size       : 0.10
-Key size (PK + SK)   : 0.05
-Security level       : 0.20
+Report saved to: /home/meryemsena/Downloads/secp256k1/AI/results/ai_parameter_selection_report.txt

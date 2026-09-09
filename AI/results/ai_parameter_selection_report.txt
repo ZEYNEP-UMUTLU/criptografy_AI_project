@@ -23,11 +23,11 @@ w                    0.000000
 PARAMETER RANKING
  rank                    parameter  security_bits  predicted_sign_us     keygen_us   verify_us  signature_bytes_mean  final_score
     1 sphincs-shake256-256f-simple            256       1.474234e+05   7873.209000 3692.862333               49856.0     0.738328
-    2 sphincs-shake256-128f-simple            128       5.216536e+04   2289.135000 2892.753333               17088.0     0.707293
-    3 sphincs-shake256-192f-simple            192       8.284925e+04   3293.895000 4186.730000               35664.0     0.692599
+    2 sphincs-shake256-128f-simple            128       5.216536e+04   2289.135000 2892.753333               17088.0     0.718283
+    3 sphincs-shake256-192f-simple            192       8.284925e+04   3293.895000 4186.730000               35664.0     0.700704
     4 sphincs-shake256-128s-simple            128       1.016142e+06 134701.542333  973.028667                7856.0     0.466782
-    5 sphincs-shake256-256s-simple            256       1.567425e+06 133020.401333 2184.917667               29792.0     0.420936
-    6 sphincs-shake256-192s-simple            192       1.734028e+06 193353.577333 1401.899000               16224.0     0.306769
+    5 sphincs-shake256-256s-simple            256       1.567425e+06 133020.401333 2184.917667               29792.0     0.397051
+    6 sphincs-shake256-192s-simple            192       1.734028e+06 193353.577333 1401.899000               16224.0     0.291731
 
 AI RECOMMENDATION
 sphincs-shake256-256f-simple
@@ -36,5 +36,6 @@ SCORING WEIGHTS
 Signing latency      : 0.40
 Key generation       : 0.15
 Verification         : 0.10
-Signature size       : 0.15
+Signature size       : 0.10
+Key size (PK + SK)   : 0.05
 Security level       : 0.20
