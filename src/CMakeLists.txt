@@ -3,6 +3,7 @@ add_library(secp256k1)
 set_property(TARGET secp256k1 PROPERTY PUBLIC_HEADER
   ${PROJECT_SOURCE_DIR}/include/secp256k1.h
   ${PROJECT_SOURCE_DIR}/include/secp256k1_preallocated.h
+  ${PROJECT_SOURCE_DIR}/include/secp256k1_sphincs.h
 )
 
 # Processing must be done in a topological sorting of the dependency graph
@@ -63,6 +64,174 @@ add_library(secp256k1_precomputed OBJECT EXCLUDE_FROM_ALL
 # from being exported.
 target_sources(secp256k1 PRIVATE secp256k1.c $<TARGET_OBJECTS:secp256k1_precomputed>)
 
+if(SECP256K1_ENABLE_MODULE_SPHINCS)
+  find_package(OpenMP REQUIRED)
+  find_package(OpenSSL REQUIRED COMPONENTS Crypto)
+
+  target_link_libraries(secp256k1 PRIVATE
+    OpenMP::OpenMP_C
+    OpenSSL::Crypto
+  )
+
+  # --------------------------------------------------------------------------
+  # SPHINCS+ SHAKE256-128f-simple
+  # --------------------------------------------------------------------------
+  add_library(secp256k1_sphincs OBJECT
+    sphincs_shake256_128f/address.c
+    sphincs_shake256_128f/fips202.c
+    sphincs_shake256_128f/fors.c
+    sphincs_shake256_128f/hash_shake256.c
+    sphincs_shake256_128f/rng.c
+    sphincs_shake256_128f/sign.c
+    sphincs_shake256_128f/thash_shake256_simple.c
+    sphincs_shake256_128f/utils.c
+    sphincs_shake256_128f/wots.c
+  )
+
+  set_target_properties(secp256k1_sphincs PROPERTIES
+    C_STANDARD 99
+    C_STANDARD_REQUIRED YES
+    C_EXTENSIONS OFF
+  )
+
+  target_compile_options(secp256k1_sphincs PRIVATE
+    -O3
+    -march=native
+    -fomit-frame-pointer
+    -flto
+  )
+
+  target_link_libraries(secp256k1_sphincs PRIVATE
+    OpenMP::OpenMP_C
+    OpenSSL::Crypto
+  )
+
+  # --------------------------------------------------------------------------
+  # SPHINCS+ SHAKE256-256f-simple
+  #
+  # 128f and 256f share many global helper symbols.  Prefix the 256f
+  # implementation at compile time so both implementations can coexist.
+  # --------------------------------------------------------------------------
+  add_library(secp256k1_sphincs_256f OBJECT
+    sphincs_shake256_256f/address.c
+    sphincs_shake256_256f/fips202.c
+    sphincs_shake256_256f/fors.c
+    sphincs_shake256_256f/hash_shake256.c
+    sphincs_shake256_256f/rng.c
+    sphincs_shake256_256f/sign.c
+    sphincs_shake256_256f/thash_shake256_simple.c
+    sphincs_shake256_256f/utils.c
+    sphincs_shake256_256f/wots.c
+  )
+
+  set_target_properties(secp256k1_sphincs_256f PROPERTIES
+    C_STANDARD 99
+    C_STANDARD_REQUIRED YES
+    C_EXTENSIONS OFF
+  )
+
+  target_compile_options(secp256k1_sphincs_256f PRIVATE
+    -O3
+    -march=native
+    -fomit-frame-pointer
+    -flto
+  )
+
+  target_compile_definitions(secp256k1_sphincs_256f PRIVATE
+    crypto_sign=sphincs256f_crypto_sign
+    crypto_sign_keypair=sphincs256f_crypto_sign_keypair
+    crypto_sign_open=sphincs256f_crypto_sign_open
+    crypto_sign_seed_keypair=sphincs256f_crypto_sign_seed_keypair
+    crypto_sign_signature=sphincs256f_crypto_sign_signature
+    crypto_sign_verify=sphincs256f_crypto_sign_verify
+    crypto_sign_bytes=sphincs256f_crypto_sign_bytes
+    crypto_sign_publickeybytes=sphincs256f_crypto_sign_publickeybytes
+    crypto_sign_secretkeybytes=sphincs256f_crypto_sign_secretkeybytes
+    crypto_sign_seedbytes=sphincs256f_crypto_sign_seedbytes
+
+    bytes_to_ull=sphincs256f_bytes_to_ull
+    AES256_ECB=sphincs256f_AES256_ECB
+    compute_root=sphincs256f_compute_root
+    copy_keypair_addr=sphincs256f_copy_keypair_addr
+    copy_subtree_addr=sphincs256f_copy_subtree_addr
+    fors_pk_from_sig=sphincs256f_fors_pk_from_sig
+    fors_sign=sphincs256f_fors_sign
+    gen_message_random=sphincs256f_gen_message_random
+    handleErrors=sphincs256f_handleErrors
+    hash_message=sphincs256f_hash_message
+    initialize_hash_function=sphincs256f_initialize_hash_function
+    prf_addr=sphincs256f_prf_addr
+  seedexpander=sphincs256f_seedexpander
+  seedexpander_init=sphincs256f_seedexpander_init
+  AES256_CTR_DRBG_Update=sphincs256f_AES256_CTR_DRBG_Update
+  randombytes_init=sphincs256f_randombytes_init
+  randombytes=sphincs256f_randombytes
+  DRBG_ctx=sphincs256f_DRBG_ctx
+
+    set_chain_addr=sphincs256f_set_chain_addr
+    set_hash_addr=sphincs256f_set_hash_addr
+    set_keypair_addr=sphincs256f_set_keypair_addr
+    set_layer_addr=sphincs256f_set_layer_addr
+    set_tree_addr=sphincs256f_set_tree_addr
+    set_tree_height=sphincs256f_set_tree_height
+    set_tree_index=sphincs256f_set_tree_index
+    set_type=sphincs256f_set_type
+
+    sha3_256=sphincs256f_sha3_256
+    sha3_256_inc_absorb=sphincs256f_sha3_256_inc_absorb
+    sha3_256_inc_finalize=sphincs256f_sha3_256_inc_finalize
+    sha3_256_inc_init=sphincs256f_sha3_256_inc_init
+
+    sha3_512=sphincs256f_sha3_512
+    sha3_512_inc_absorb=sphincs256f_sha3_512_inc_absorb
+    sha3_512_inc_finalize=sphincs256f_sha3_512_inc_finalize
+    sha3_512_inc_init=sphincs256f_sha3_512_inc_init
+
+    shake128=sphincs256f_shake128
+    shake128_absorb=sphincs256f_shake128_absorb
+    shake128_inc_absorb=sphincs256f_shake128_inc_absorb
+    shake128_inc_finalize=sphincs256f_shake128_inc_finalize
+    shake128_inc_init=sphincs256f_shake128_inc_init
+    shake128_inc_squeeze=sphincs256f_shake128_inc_squeeze
+    shake128_squeezeblocks=sphincs256f_shake128_squeezeblocks
+
+    shake256=sphincs256f_shake256
+    shake256_absorb=sphincs256f_shake256_absorb
+    shake256_inc_absorb=sphincs256f_shake256_inc_absorb
+    shake256_inc_finalize=sphincs256f_shake256_inc_finalize
+    shake256_inc_init=sphincs256f_shake256_inc_init
+    shake256_inc_squeeze=sphincs256f_shake256_inc_squeeze
+    shake256_squeezeblocks=sphincs256f_shake256_squeezeblocks
+
+    thash=sphincs256f_thash
+    treehash=sphincs256f_treehash
+    treehash_parallel=sphincs256f_treehash_parallel
+    u32_to_bytes=sphincs256f_u32_to_bytes
+    ull_to_bytes=sphincs256f_ull_to_bytes
+
+    wots_gen_pk=sphincs256f_wots_gen_pk
+    wots_pk_from_sig=sphincs256f_wots_pk_from_sig
+    wots_sign=sphincs256f_wots_sign
+  )
+
+  target_link_libraries(secp256k1_sphincs_256f PRIVATE
+    OpenMP::OpenMP_C
+    OpenSSL::Crypto
+  )
+
+  target_sources(secp256k1 PRIVATE
+    $<TARGET_OBJECTS:secp256k1_sphincs>
+    $<TARGET_OBJECTS:secp256k1_sphincs_256f>
+    sphincs_shake256_128f.c
+    sphincs_shake256_256f.c
+  )
+
+  target_include_directories(secp256k1 PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+  )
+endif()
+
+
 if(NOT SECP256K1_ENABLE_API_VISIBILITY_ATTRIBUTES)
   target_compile_definitions(secp256k1 PRIVATE SECP256K1_NO_API_VISIBILITY_ATTRIBUTES)
 endif()
@@ -113,6 +282,13 @@ set_libtool_abi_version(secp256k1
 if(SECP256K1_BUILD_BENCHMARK)
   add_executable(bench bench.c)
   target_link_libraries(bench secp256k1)
+
+  if(SECP256K1_ENABLE_MODULE_SPHINCS)
+    add_executable(bench_sphincs bench_sphincs.c)
+    target_include_directories(bench_sphincs PRIVATE ${PROJECT_SOURCE_DIR}/include)
+    target_link_libraries(bench_sphincs secp256k1)
+  endif()
+
   add_executable(bench_internal bench_internal.c)
   target_link_libraries(bench_internal secp256k1_precomputed secp256k1_asm)
   add_executable(bench_ecmult bench_ecmult.c)

@@ -16,6 +16,10 @@ endfunction()
 
 add_example(ecdsa)
 
+if(SECP256K1_ENABLE_MODULE_SPHINCS)
+  add_example(sphincs)
+endif()
+
 if(SECP256K1_ENABLE_MODULE_ECDH)
   add_example(ecdh)
 endif()

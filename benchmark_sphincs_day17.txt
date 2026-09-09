@@ -1,0 +1,7 @@
+SPHINCS+ SHAKE256-128f-simple benchmark
+Results are in microseconds per operation.
+Iterations: 10
+
+sphincs_keygen                          ,     1162.0       ,     1372.0       ,     1568.0    
+sphincs_sign                            ,    23886.0       ,    28499.0       ,    37370.0    
+sphincs_verify                          ,     3139.0       ,     3344.0       ,     3608.0    

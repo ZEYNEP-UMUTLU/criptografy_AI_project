@@ -1,61 +1,79 @@
-bench
-bench_ecmult
-bench_internal
-noverify_tests
-tests
-exhaustive_tests
-precompute_ecmult_gen
-precompute_ecmult
-ctime_tests
-ecdh_example
-ecdsa_example
-schnorr_example
-ellswift_example
-musig_example
-silentpayments_example
-*.exe
-*.so
+# =========================
+# Build artifacts
+# =========================
+/build/
+*.o
 *.a
-*.csv
-*.log
-*.trs
-*.sage.py
+*.so
+*.la
+*.lo
+*.d
+*.exe
 
-Makefile
-configure
-.libs/
-Makefile.in
-aclocal.m4
+# =========================
+# CMake
+# =========================
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+compile_commands.json
+/CMakeUserPresets.json
+
+# =========================
+# Autotools generated files
+# =========================
+/.libs/
+/.deps/
+*.dirstamp
 autom4te.cache/
 config.log
 config.status
 conftest*
-*.tar.gz
-*.la
 libtool
-.deps/
-.dirstamp
-*.lo
-*.o
-*~
+*.tar.gz
 
-coverage/
-coverage.html
-coverage.*.html
-*.gcda
-*.gcno
-*.gcov
-
-/autotools-aux/
-!/autotools-aux/m4/bitcoin_secp.m4
-
-libsecp256k1.pc
-
-### CMake
-/CMakeUserPresets.json
-# CMake build directories.
-/*build*
-
-### Python
+# =========================
+# Python
+# =========================
+.venv/
 __pycache__/
-*.py[oc]
+*.pyc
+*.pyo
+*.pyd
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Local / temporary binaries
+# =========================
+/AI/test_ai_selected_256f
+/AI/bench_ai_selected_256f
+
+# =========================
+# Local backups
+# =========================
+/backups/
+
+# =========================
+# Local benchmark logs
+# =========================
+*.log
+*.trs
+
+# =========================
+# Generated local files
+# =========================
+*.sage.py
