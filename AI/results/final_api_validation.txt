@@ -1,0 +1,25 @@
+===== AI-SELECTED SPHINCS+ 256f TEST =====
+Selected parameter : sphincs-shake256-256f-simple
+Public key bytes   : 64
+Secret key bytes   : 128
+Signature bytes    : 49856
+
+[1] Keypair generation...
+PASS: keypair
+[2] Signing...
+PASS: signing
+Signature length = 49856 bytes
+PASS: signature size
+[3] Verification...
+PASS: verification
+[4] Tampered signature rejection...
+PASS: tampered signature rejected
+[5] Tampered message rejection...
+PASS: tampered message rejected
+
+===== AI VALIDATION RESULT =====
+AI recommendation   : sphincs-shake256-256f-simple
+secp256k1 parameter : sphincs-shake256-256f-simple
+AI -> secp256k1     : PASS
+API validation      : PASS
+Overall result      : PASS
